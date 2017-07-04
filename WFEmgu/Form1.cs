@@ -159,5 +159,22 @@ namespace WFEmgu
             #endregion
 
         }
+        [STAThread]
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            FormCamera formCamera = new FormCamera();
+            formCamera.Show();
+
+
+            // Снимок с камеры
+            //ImageViewer viewer = new ImageViewer(); //create an image viewer
+            //Capture capture = new Capture(); //create a camera captue
+            //viewer.Image = capture.QueryFrame(); //draw the image obtained from camera
+            //Image<Bgr, Byte> ImageFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
+            //originalImageBox.Image = ImageFrame.ToBitmap();
+        }
+
+        
     }
 }

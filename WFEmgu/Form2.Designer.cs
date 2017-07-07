@@ -32,8 +32,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.CircleBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.originalImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CircleBox)).BeginInit();
             this.SuspendLayout();
             // 
             // originalImageBox
@@ -66,11 +68,20 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
+            // CircleBox
+            // 
+            this.CircleBox.Location = new System.Drawing.Point(12, 443);
+            this.CircleBox.Name = "CircleBox";
+            this.CircleBox.Size = new System.Drawing.Size(400, 400);
+            this.CircleBox.TabIndex = 6;
+            this.CircleBox.TabStop = false;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(863, 755);
+            this.Controls.Add(this.CircleBox);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.originalImageBox);
             this.Controls.Add(this.button1);
@@ -78,6 +89,7 @@
             this.Text = "Form2";
             ((System.ComponentModel.ISupportInitialize)(this.originalImageBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CircleBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -88,5 +100,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox CircleBox;
     }
 }

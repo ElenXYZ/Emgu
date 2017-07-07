@@ -39,7 +39,7 @@ namespace WFEmgu
             CvInvoke.CvtColor(img, uimage, ColorConversion.Bgr2Gray);
             originalImageBox.Image = uimage.Bitmap;
             fnEdgeDetection();
-
+            fnCircleDetection();
 
         }
         double dCannyThres = 180.0;
@@ -61,6 +61,21 @@ namespace WFEmgu
             foreach (LineSegment2D line in lines)
                 lineImage.Draw(line, new Bgr(Color.Green), 2);
             pictureBox1.Image = lineImage.Bitmap;
+        }
+        #endregion
+
+        #region Circle detection
+        CircleF[] circles;
+        Image<Bgr, Byte> CircleImage;
+        private void fnCircleDetection()
+        {
+            dCannyThres = 180.0;
+            CircleImage = img.CopyBlank();
+            double dCircleAccumulatorThres = 120.0;
+            circles = CvInvoke.HoughCircles(uimage, HoughType.Gradient, 2.0, 3.0, dCannyThres, dCircleAccumulatorThres);
+            foreach (CircleF circle in circles)
+                CircleImage.Draw(circle, new Bgr(Color.Brown), 2);
+            CircleBox.Image = CircleImage.Bitmap;
         }
         #endregion
     }

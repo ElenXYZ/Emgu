@@ -22,7 +22,7 @@ namespace WFEmgu
             // Кусочек кода после закрытия формы открывает окно и активирует камеру
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Form2());
             //ImageViewer viewer = new ImageViewer(); //create an image viewer
             //Capture capture = new Capture(); //create a camera captue
 

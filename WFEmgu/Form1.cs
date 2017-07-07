@@ -33,13 +33,18 @@ namespace WFEmgu
             }
         }
 
+        List<Triangle2DF> triangleList = new List<Triangle2DF>();
+        List<RotatedRect> boxList = new List<RotatedRect>();
+        Image<Bgr, Byte> triangleRectImage;
         private void GetImage(string filepath)
         {
+
             StringBuilder msgBuilder = new StringBuilder("Performance: ");
             Image<Bgr, Byte> img = new Image<Bgr, byte>(lblImagePath.Text).Resize(400, 400, Emgu.CV.CvEnum.Inter.Linear, true);
             //Convert the image to grayscale and filter out the noise
             UMat uimage = new UMat();
             CvInvoke.CvtColor(img, uimage, ColorConversion.Bgr2Gray);
+            triangleRectImage = img.CopyBlank();
 
             //use image pyr to remove noise
             UMat pyrDown = new UMat();
@@ -144,19 +149,78 @@ namespace WFEmgu
             triangleRectangleImageBox.Image = triangleRectangleImage.ToBitmap();
             #endregion
 
-            #region draw circles
-            Image<Bgr, Byte> circleImage = img.CopyBlank();
-            foreach (CircleF circle in circles)
-                circleImage.Draw(circle, new Bgr(Color.Brown), 2);
-            circleImageBox.Image = circleImage.ToBitmap();
+            #region Находим контуры
+            VectorOfVectorOfPoint contoursDetected = new VectorOfVectorOfPoint();
+
+            CvInvoke.FindContours(uimage, contoursDetected, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+            Image<Bgr, Byte> contourImage = img.CopyBlank();
+            var contoursArray = new List<VectorOfPoint>();
+            int countDetected = contoursDetected.Size;
+          
+            for (int i = 0; i < countDetected; i++)
+            { using (VectorOfPoint currContour = contoursDetected[i])
+                {
+                    using (VectorOfPoint approxContour = new VectorOfPoint())
+                    {
+                        CvInvoke.ApproxPolyDP(currContour, approxContour, CvInvoke.ArcLength(currContour, true) * 0.02, true);
+
+                        
+                        if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contour with area > 250
+                        {
+                            if (approxContour.Size == 3) //The contour has 3 vertices, is a triangle
+                            {
+                                Point[] pts = approxContour.ToArray();
+                                triangleList.Add(new Triangle2DF(pts[0], pts[1], pts[2]));
+                            }
+                            else if (approxContour.Size == 4) // The contour has 4 vertices
+                            {
+                                #region Determine if all the angles in the contours are within [80,100] degree
+                                bool isRectangle = true;
+                                Point[] pts = approxContour.ToArray();
+                                LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
+                                for (int j = 0; j < edges.Length; j++)
+                                {
+                                    double dAngle = Math.Abs(edges[(j + 1) % edges.Length].GetExteriorAngleDegree(edges[j]));
+                                    if (dAngle < 80 || dAngle > 100)
+                                    {
+                                        isRectangle = false;
+                                        break;
+                                    }
+                                }
+                                #endregion
+                                if (isRectangle) boxList.Add(CvInvoke.MinAreaRect(approxContour));
+                            }
+                        }
+                    }
+                }
+
+            }
+            foreach (Triangle2DF triangle in triangleList)
+            {
+                triangleRectImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
+            }
+            foreach (RotatedRect box in boxList)
+                triangleRectImage.Draw(box, new Bgr(Color.Red), 2);
+            circleImageBox.Image = triangleRectImage.ToBitmap();
+
+        
+               
             #endregion
 
-            #region draw lines
-            Image<Bgr, Byte> lineImage = img.CopyBlank();
-            foreach (LineSegment2D line in lines)
-                lineImage.Draw(line, new Bgr(Color.Green), 2);
-            lineImageBox.Image = lineImage.ToBitmap();
-            #endregion
+
+            //#region draw circles
+            //Image<Bgr, Byte> circleImage = img.CopyBlank();
+            //foreach (CircleF circle in circles)
+            //    circleImage.Draw(circle, new Bgr(Color.Brown), 2);
+            //circleImageBox.Image = circleImage.ToBitmap();
+            //#endregion
+
+            //#region draw lines
+            //Image<Bgr, Byte> lineImage = img.CopyBlank();
+            //foreach (LineSegment2D line in lines)
+            //    lineImage.Draw(line, new Bgr(Color.Green), 2);
+            //lineImageBox.Image = lineImage.ToBitmap();
+            //#endregion
 
         }
         [STAThread]

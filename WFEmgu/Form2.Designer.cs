@@ -33,6 +33,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.CircleBox = new System.Windows.Forms.PictureBox();
+            this.btnCamera = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.originalImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CircleBox)).BeginInit();
@@ -76,11 +77,22 @@
             this.CircleBox.TabIndex = 6;
             this.CircleBox.TabStop = false;
             // 
+            // btnCamera
+            // 
+            this.btnCamera.Location = new System.Drawing.Point(93, 8);
+            this.btnCamera.Name = "btnCamera";
+            this.btnCamera.Size = new System.Drawing.Size(98, 23);
+            this.btnCamera.TabIndex = 7;
+            this.btnCamera.Text = "Catch Camera";
+            this.btnCamera.UseVisualStyleBackColor = true;
+            this.btnCamera.Click += new System.EventHandler(this.btnCamera_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(863, 755);
+            this.Controls.Add(this.btnCamera);
             this.Controls.Add(this.CircleBox);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.originalImageBox);
@@ -101,5 +113,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox CircleBox;
+        private System.Windows.Forms.Button btnCamera;
     }
 }
